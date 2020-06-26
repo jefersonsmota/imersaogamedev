@@ -1,9 +1,11 @@
 class Enemy extends Character {
-    constructor(imageSource, positionX, positionY, imgWidth, imgHeight, dWidth, dHeight) {
-        super(imageSource, positionX, positionY-20, imgWidth, imgHeight, dWidth, dHeight);
+    constructor(sprite, position, speed) {
+        super(sprite, position);
+
+        this.speed = speed;
     }
 
-    loop() {
+    loop() {        
         this.display();
         this.update();
     }
@@ -14,24 +16,13 @@ class Enemy extends Character {
     }
 
     move() {
-        this.x -= 10;
+        this.position.x -= this.speed;
 
-        if(this.x <= -this.width) {
-            this.x = width-this.width;
-        }
-    }
-
-    animate() {
-        this.dx += this.dw;
-
-        if(this.dx >= (this.LIMIT_WIDTH)) {
-            this.dx = 0;
-            this.dy += this.dh;
-
-            if(this.dy > (this.LIMIT_HEIGHT)){
-                this.dx = 0;
-                this.dy = 0;
-            }
+        if (this.position.x <= -(this.sprite.width-10)) {
+            this.isOutScreen = true;
+            this.position.x = width;
+        } else {
+            this.isOutScreen = false;
         }
     }
 }

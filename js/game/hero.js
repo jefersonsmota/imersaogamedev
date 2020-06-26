@@ -1,10 +1,13 @@
 class Hero extends Character {
-    constructor(imageSource, positionX, positionY, imgWidth, imgHeight, dWidth, dHeight) {
-        super(imageSource, positionX, positionY - 20, imgWidth, imgHeight, dWidth, dHeight);
+    constructor(sprite, position, jumpSound) {
+        super(sprite, position);
 
-        this.initialY = this.y;
+        this.initialY = this.position.y;
         this.jumpSpeed = 0;
-        this.gravityForce = 4;
+        this.gravityForce = 3;
+        this.jumpCount = 0;
+        this.jumpSound = jumpSound;
+        this.jumpSound.setVolume(0.3);
     }
 
     loop() {
@@ -17,43 +20,55 @@ class Hero extends Character {
         this.animate();
     }
 
-    animate() {
-        this.dx += this.dw;
-
-        if (this.dx >= (this.LIMIT_WIDTH)) {
-            this.dx = 0;
-            this.dy += this.dh;
-
-            if (this.dy > (this.LIMIT_HEIGHT)) {
-                this.dx = 0;
-                this.dy = 0;
-            }
-        }
-    }
-
     jump() {
-        this.jumpSpeed = -35;
-        console.log('jumpSpeed:', this.jumpSpeed, 'y', this.y);
+        if (this.jumpCount < 2) {
+            this.jumpSpeed = -35;
+            this.jumpCount++;
+            this.jumpSound.play();
+        }
     }
 
     gravity() {
-        if(this.y < 0) this.y = 0;
+        if (this.position.y < 0) this.position.y = 0;
 
-        this.y = this.y + this.jumpSpeed;
+        this.position.y = this.position.y + this.jumpSpeed;
         this.jumpSpeed += this.gravityForce;
 
-        if (this.y > this.initialY) {
-            this.y = this.initialY;
+        if (this.position.y > this.initialY) {
+            this.position.y = this.initialY;
             this.jumpSpeed = 0;
+            this.jumpCount = 0;
         }
     }
 
-    collide(character) {
+    collided(character) {
+        fill(255);
+        
+        // rect(
+        //     this.position.x+(this.sprite.width/4), 
+        //     this.position.y+(this.sprite.height/4), 
+        //     this.sprite.width * 0.35, 
+        //     this.sprite.height*0.75);
+
+        // rect(
+        //     character.position.x+(character.sprite.width/4), 
+        //     character.position.y+(character.sprite.height/4), 
+        //     character.sprite.width* 0.50, 
+        //     character.sprite.height*0.75
+        //     );
+
         return collideRectRect(
-            this.x, this.y,
-            this.width, this.height,
-            character.x, character.y,
-            character.width, character.height,
+            this.position.x+(this.sprite.width/4), 
+            this.position.y+(this.sprite.height/4),
+            this.sprite.width * 0.35, 
+            this.sprite.height*0.75,
+
+
+
+            character.position.x+(character.sprite.width/4), 
+            character.position.y+(character.sprite.height/4), 
+            character.sprite.width*0.50, 
+            character.sprite.height*0.75
         );
     }
 }
