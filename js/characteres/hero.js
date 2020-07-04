@@ -8,6 +8,9 @@ class Hero extends Character {
         this.jumpCount = 0;
         this.jumpSound = jumpSound;
         this.jumpSound.setVolume(0.3);
+
+        this.disabled = false;
+        this.lifes = 3;        
     }
 
     loop() {
@@ -42,7 +45,7 @@ class Hero extends Character {
     }
 
     collided(character) {
-        fill(255);
+        // fill(255);
         
         // rect(
         //     this.position.x+(this.sprite.width/4), 
@@ -63,12 +66,20 @@ class Hero extends Character {
             this.sprite.width * 0.35, 
             this.sprite.height*0.75,
 
-
-
             character.position.x+(character.sprite.width/4), 
             character.position.y+(character.sprite.height/4), 
             character.sprite.width*0.50, 
             character.sprite.height*0.75
         );
+    }
+
+    damage() {
+        if(!this.disabled){
+            this.lifes--;
+            this.disabled = true;
+            setTimeout(() => { this.disabled = false; }, 1500);
+        }
+
+        return this.lifes;
     }
 }

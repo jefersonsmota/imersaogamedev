@@ -4,6 +4,7 @@ class Score {
         this.positionX = 30;
 
         this.delay = 0;
+        this.isStoped = false;
     }
 
     loop() {
@@ -18,6 +19,8 @@ class Score {
     }
 
     update() {
+        if(this.isStoped) return;
+
         if(this.delay == 2) {
             this.points++;
             this.delay = 0;
@@ -29,5 +32,9 @@ class Score {
         }
 
         this.delay++;
+    }
+
+    toggleStop() {
+        this.isStoped = true;
     }
 }
